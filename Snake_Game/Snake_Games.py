@@ -130,10 +130,13 @@ def close_window():
     menu.destroy()
 
 def speedfixed () :
-    pass
+    global helpp
+    helpp = 1
 
 def speedup () :
     global gamespeed
+    global helpp
+    helpp = 0 
     gamespeed += 1
     return
 
@@ -196,7 +199,7 @@ close_button.pack()
 menu.mainloop()
 
 def Game():
-    
+    global helpp
     pygame.init()
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
@@ -206,7 +209,7 @@ def Game():
 
     snake = Snake()
     food = Food()
-
+    
     while True:
         clock.tick(gamespeed)
         snake.handle_keys()
@@ -217,7 +220,10 @@ def Game():
             snake.length += 1
             snake.score += 1
             food.random_position()
-            speedup ()
+            if helpp == 0 :
+                speedup ()
+                helpp == 0
+                
 
         snake.draw(surface)
         food.draw(surface)
