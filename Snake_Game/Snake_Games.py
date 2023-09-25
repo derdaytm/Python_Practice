@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import tkinter as tk
+import time
 
 screen_width = 600
 screen_height = 600
@@ -10,6 +11,9 @@ gridsize = 20
 grid_width = screen_width // gridsize
 grid_height = screen_height // gridsize
 
+input_box = pygame.Rect(200,200,300,36)
+
+text_color = (255, 255, 255)
 light_green = (0, 170, 140)
 dark_green = (0, 140, 120)
 food_color = (250, 200, 0)
@@ -19,12 +23,13 @@ up = (0, -1)
 down = (0, 1)
 right = (1, 0)
 left = (-1, 0)
+stop = (0, 0)
 
 class Snake:
     def __init__(self):
         self.positions = [(screen_width // 2, screen_height // 2)]
         self.length = 1
-        self.direction = random.choice([up, down, right, left])
+        self.direction = stop
         self.color = snake_color
         self.score = 0
 
@@ -36,11 +41,11 @@ class Snake:
     def move(self):
         current = self.positions[0]
         x, y = self.direction
+        global new
         new = ((current[0] + (x * gridsize)) % screen_width, (current[1] + (y * gridsize)) % screen_height)
 
-        if new in self.positions[2:]:
-            self.reset()
-        else:
+        if not new in self.positions[2:]:
+
             self.positions.insert(0, new)
             
             if len(self.positions) > self.length:
@@ -49,7 +54,7 @@ class Snake:
     def reset(self):
         self.length = 1
         self.positions = [(screen_width // 2, screen_height // 2)]
-        self.direction = random.choice([up, down, right, left])
+        self.direction = stop
         self.score = 0
 
     def handle_keys(self):
@@ -104,14 +109,9 @@ def drawGrid(surface):
 def is_game_over(snake):
     head = snake.positions[0]  
     
-    for segment in snake.positions[1:]:
-        if head == segment:
-            return True
-    
-    if (head[0] < 0 or head[0] >= screen_width
-            or head[1] < 0 or head[1] >= screen_height):
+    if new in snake.positions[2:] :
         return True
-    
+
     return False
 
 def Gamespeed_easy () :
@@ -125,9 +125,6 @@ def Gamespeed_normal () :
 def Gamespeed_hard () :
     global gamespeed
     gamespeed = 20
-
-def close_window():
-    menu.destroy()
 
 def speedfixed () :
     global helpp
@@ -149,56 +146,76 @@ def center_window(window, width, height):
 
     window.geometry(f"{width}x{height}+{x}+{y}")
 
-menu = tk.Tk()
-menu.title("Game Menu")
+def Menu () :
+    def close_window():
+        menu.destroy ()
 
-window_width = 200
-window_height = 200
+    def quit_window():
+        pygame.quit ()
+        sys.exit ()
 
-center_window(menu, window_width, window_height)
+    menu = tk.Tk()
+    menu.title("Game Menu")
 
-frame = tk.Frame(menu)
-frame.pack()
+    window_width = 250
+    window_height = 300
 
-title = tk.Label(frame, text="Snake Games", font='arial')
-title.pack()
-title = tk.Label(frame, text="------------------------", font='arial')
-title.pack()
-title = tk.Label(frame, text="Game Difficulty", font='arial')
-title.pack()
+    center_window(menu, window_width, window_height)
 
-difficulty_frame = tk.Frame(frame)
-difficulty_frame.pack()
+    frame = tk.Frame(menu)
+    frame.pack()
 
-button_easy = tk.Button(difficulty_frame, text="Easy", command=Gamespeed_easy)
-button_normal = tk.Button(difficulty_frame, text="Normal", command=Gamespeed_normal)
-button_hard = tk.Button(difficulty_frame, text="Hard", command=Gamespeed_hard)
+    title = tk.Label(frame, text="Snake Games", font='arial')
+    title.pack()
+    title = tk.Label(frame, text="------------------------", font='arial')
+    title.pack()
+    title = tk.Label(frame, text="Game Difficulty", font='arial')
+    title.pack()
 
-button_easy.pack(side="left")
-button_normal.pack(side="left")
-button_hard.pack(side="left")
+    difficulty_frame = tk.Frame(frame)
+    difficulty_frame.pack()
 
-title = tk.Label(frame, text="------------------------", font='arial')
-title.pack()
+    button_easy = tk.Button(difficulty_frame, text="Easy", command=Gamespeed_easy)
+    button_normal = tk.Button(difficulty_frame, text="Normal", command=Gamespeed_normal)
+    button_hard = tk.Button(difficulty_frame, text="Hard", command=Gamespeed_hard)
 
-title = tk.Label(frame, text="Speed Fixed", font='arial')
-title.pack()
+    button_easy.pack(side="left")
+    button_normal.pack(side="left")
+    button_hard.pack(side="left")
 
-play_frame = tk.Frame(frame) 
-play_frame.pack()
+    title = tk.Label(frame, text="------------------------", font='arial')
+    title.pack()
 
-button_yes = tk.Button(play_frame, text="yes", command=speedfixed)
-button_no = tk.Button(play_frame, text="no", command=speedup)
+    title = tk.Label(frame, text="Speed Fixed", font='arial')
+    title.pack()
 
-button_yes.pack(side="left")
-button_no.pack(side="left")
+    play_frame = tk.Frame(frame) 
+    play_frame.pack() 
 
-close_button = tk.Button(menu, text="Game Start", command=close_window)
-close_button.pack()
+    button_yes = tk.Button(play_frame, text="yes", command=speedfixed)
+    button_no = tk.Button(play_frame, text="no", command=speedup)
 
-menu.mainloop()
+    button_yes.pack(side="left")
+    button_no.pack(side="left")
+
+    title = tk.Label(frame, text="------------------------", font='arial')
+    title.pack()
+
+    window_frame = tk.Frame (frame)
+    window_frame.pack ()
+
+    close_button = tk.Button(window_frame, text="Game Start", command=close_window)
+    close_button.pack()
+    quit_button = tk.Button(window_frame, text="Quit Game", command=quit_window)
+    quit_button.pack()
+    score_button = tk.Button( text="Score Board")
+    score_button.pack()
+
+
+    menu.mainloop()
 
 def Game():
+    Menu ()
     global helpp
     pygame.init()
     screen = pygame.display.set_mode((screen_width, screen_height))
@@ -233,22 +250,12 @@ def Game():
         pygame.display.update()
         
         if is_game_over(snake):
-            game_over_text = font.render("Game Over! Play again? (Y/N)", True, (255, 0, 0))
-            screen.blit(game_over_text, (200, 300))
+            time.sleep (0.3)
             pygame.display.update()
+            Menu ()
+            snake.reset()
+            food.random_position()
 
-            waiting_for_input = True
-            while waiting_for_input:
-                for event in pygame.event.get():
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_y:
-                            snake.reset()
-                            food.random_position()
-                            waiting_for_input = False
-                        
-                        elif event.key == pygame.K_n:
-                            pygame.quit()
-                            sys.exit()
 
 if __name__ == "__main__":
     Game()
