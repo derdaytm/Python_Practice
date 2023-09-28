@@ -3,6 +3,7 @@ import sys
 import random
 import tkinter as tk
 import time
+import configparser
 
 screen_width = 600
 screen_height = 600
@@ -24,6 +25,12 @@ down = (0, 1)
 right = (1, 0)
 left = (-1, 0)
 stop = (0, 0)
+
+parser = configparser.ConfigParser ()
+parser.read ("Settings.cfg")
+
+gamespeed = parser["Settings"].getint("gamespeed")
+helpp = parser["Settings"].getint("helpp")
 
 class Snake:
     def __init__(self):
@@ -117,24 +124,45 @@ def is_game_over(snake):
 def Gamespeed_easy () :
     global gamespeed
     gamespeed = 3
+    
+    parser.set ("Settings", "gamespeed", "3")
+    with open ("Settings.cfg", "w") as dosya :
+        parser.write (dosya)
 
 def Gamespeed_normal () :
     global gamespeed
     gamespeed = 10
+    
+    parser.set ("Settings", "gamespeed", "10")
+    with open ("Settings.cfg", "w") as dosya :
+        parser.write (dosya)
 
 def Gamespeed_hard () :
     global gamespeed
     gamespeed = 20
+    
+    parser.set ("Settings", "gamespeed", "20")
+    with open ("Settings.cfg", "w") as dosya :
+        parser.write (dosya)
 
 def speedfixed () :
     global helpp
     helpp = 1
+    
+    parser.set ("Settings", "helpp", "1")
+    with open ("Settings.cfg", "w") as dosya :
+        parser.write (dosya)
 
 def speedup () :
     global gamespeed
     global helpp
     helpp = 0 
     gamespeed += 1
+    
+    parser.set ("Settings", "helpp", "0")
+    with open ("Settings.cfg", "w") as dosya :
+        parser.write (dosya)
+
     return
 
 def center_window(window, width, height):
@@ -255,7 +283,6 @@ def Game():
             Menu ()
             snake.reset()
             food.random_position()
-
 
 if __name__ == "__main__":
     Game()
