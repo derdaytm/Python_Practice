@@ -187,7 +187,7 @@ def Menu () :
     menu.title("Game Menu")
 
     window_width = 250
-    window_height = 300
+    window_height = 250
 
     center_window(menu, window_width, window_height)
 
@@ -215,7 +215,7 @@ def Menu () :
     title = tk.Label(frame, text="------------------------", font='arial')
     title.pack()
 
-    title = ttk.Label(frame, text="Speed Fixed", font='arial')
+    title = tk.Label(frame, text="Speed Fixed", font='arial')
     title.pack()
 
     play_frame = tk.Frame(frame) 
@@ -234,10 +234,10 @@ def Menu () :
     window_frame.pack ()
 
     close_button = ttk.Button(window_frame, text="Game Start", command=close_window)
-    close_button.pack()
+    close_button.pack(side="left")
     quit_button = ttk.Button(window_frame, text="Quit Game", command=quit_window)
-    quit_button.pack()
-
+    quit_button.pack(side="right")
+    
     menu.mainloop()
 
 def Game():
