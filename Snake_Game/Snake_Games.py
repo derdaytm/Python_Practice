@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import tkinter as tk
+import tkinter.ttk as ttk
 import time
 import configparser
 
@@ -27,7 +28,7 @@ left = (-1, 0)
 stop = (0, 0)
 
 parser = configparser.ConfigParser ()
-parser.read ("Settings.cfg")
+parser.read ("Snake_Game\Settings.cfg")
 
 gamespeed = parser["Settings"].getint("gamespeed")
 helpp = parser["Settings"].getint("helpp")
@@ -193,19 +194,19 @@ def Menu () :
     frame = tk.Frame(menu)
     frame.pack()
 
-    title = tk.Label(frame, text="Snake Games", font='arial')
+    title = ttk.Label(frame, text="Snake Games", font='arial')
     title.pack()
-    title = tk.Label(frame, text="------------------------", font='arial')
+    title = ttk.Label(frame, text="------------------------", font='arial')
     title.pack()
-    title = tk.Label(frame, text="Game Difficulty", font='arial')
+    title = ttk.Label(frame, text="Game Difficulty", font='arial')
     title.pack()
 
     difficulty_frame = tk.Frame(frame)
     difficulty_frame.pack()
 
-    button_easy = tk.Button(difficulty_frame, text="Easy", command=Gamespeed_easy)
-    button_normal = tk.Button(difficulty_frame, text="Normal", command=Gamespeed_normal)
-    button_hard = tk.Button(difficulty_frame, text="Hard", command=Gamespeed_hard)
+    button_easy = ttk.Button(difficulty_frame, text="Easy", command=Gamespeed_easy)
+    button_normal = ttk.Button(difficulty_frame, text="Normal", command=Gamespeed_normal)
+    button_hard = ttk.Button(difficulty_frame, text="Hard", command=Gamespeed_hard)
 
     button_easy.pack(side="left")
     button_normal.pack(side="left")
@@ -214,14 +215,14 @@ def Menu () :
     title = tk.Label(frame, text="------------------------", font='arial')
     title.pack()
 
-    title = tk.Label(frame, text="Speed Fixed", font='arial')
+    title = ttk.Label(frame, text="Speed Fixed", font='arial')
     title.pack()
 
     play_frame = tk.Frame(frame) 
     play_frame.pack() 
 
-    button_yes = tk.Button(play_frame, text="yes", command=speedfixed)
-    button_no = tk.Button(play_frame, text="no", command=speedup)
+    button_yes = ttk.Button(play_frame, text="yes", command=speedfixed)
+    button_no = ttk.Button(play_frame, text="no", command=speedup)
 
     button_yes.pack(side="left")
     button_no.pack(side="left")
@@ -232,13 +233,10 @@ def Menu () :
     window_frame = tk.Frame (frame)
     window_frame.pack ()
 
-    close_button = tk.Button(window_frame, text="Game Start", command=close_window)
+    close_button = ttk.Button(window_frame, text="Game Start", command=close_window)
     close_button.pack()
-    quit_button = tk.Button(window_frame, text="Quit Game", command=quit_window)
+    quit_button = ttk.Button(window_frame, text="Quit Game", command=quit_window)
     quit_button.pack()
-    score_button = tk.Button( text="Score Board")
-    score_button.pack()
-
 
     menu.mainloop()
 
