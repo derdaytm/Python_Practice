@@ -28,7 +28,7 @@ left = (-1, 0)
 stop = (0, 0)
 
 parser = configparser.ConfigParser ()
-parser.read ("Snake_Game\Settings.cfg")
+parser.read ("Settings.cfg")
 
 gamespeed = parser["Settings"].getint("gamespeed")
 helpp = parser["Settings"].getint("helpp")
@@ -122,50 +122,6 @@ def is_game_over(snake):
 
     return False
 
-def Gamespeed_easy () :
-    global gamespeed
-    gamespeed = 3
-    
-    parser.set ("Settings", "gamespeed", "3")
-    with open ("Settings.cfg", "w") as dosya :
-        parser.write (dosya)
-
-def Gamespeed_normal () :
-    global gamespeed
-    gamespeed = 10
-    
-    parser.set ("Settings", "gamespeed", "10")
-    with open ("Settings.cfg", "w") as dosya :
-        parser.write (dosya)
-
-def Gamespeed_hard () :
-    global gamespeed
-    gamespeed = 20
-    
-    parser.set ("Settings", "gamespeed", "20")
-    with open ("Settings.cfg", "w") as dosya :
-        parser.write (dosya)
-
-def speedfixed () :
-    global helpp
-    helpp = 1
-    
-    parser.set ("Settings", "helpp", "1")
-    with open ("Settings.cfg", "w") as dosya :
-        parser.write (dosya)
-
-def speedup () :
-    global gamespeed
-    global helpp
-    helpp = 0 
-    gamespeed += 1
-    
-    parser.set ("Settings", "helpp", "0")
-    with open ("Settings.cfg", "w") as dosya :
-        parser.write (dosya)
-
-    return
-
 def center_window(window, width, height):
     screen_width = window.winfo_screenwidth()
     screen_height = window.winfo_screenheight()
@@ -176,6 +132,68 @@ def center_window(window, width, height):
     window.geometry(f"{width}x{height}+{x}+{y}")
 
 def Menu () :
+    def update_speed_info_label():
+        if gamespeed == 3:
+            speedinfo = "easy"
+        elif gamespeed == 10:
+            speedinfo = "normal"
+        elif gamespeed == 20:
+            speedinfo = "hard"
+        
+        setting_info_s.config(text=f"gamespeed = {speedinfo}")
+    
+    def update_sf_info_label():   
+        if helpp == 0 :
+            fixedinfo = "no"
+        elif helpp == 1 :
+            fixedinfo = "yes"
+        
+        setting_info_sf.config(text=f"speedfixed = {fixedinfo}")
+
+    def Gamespeed_easy () :
+        global gamespeed
+        gamespeed = 3
+        
+        parser.set ("Settings", "gamespeed", "3")
+        with open ("Settings.cfg", "w") as dosya :
+            parser.write (dosya)
+        menu.update ()
+
+    def Gamespeed_normal () :
+        global gamespeed
+        gamespeed = 10
+        
+        parser.set ("Settings", "gamespeed", "10")
+        with open ("Settings.cfg", "w") as dosya :
+            parser.write (dosya)
+
+    def Gamespeed_hard () :
+        global gamespeed
+        gamespeed = 20
+        
+        parser.set ("Settings", "gamespeed", "20")
+        with open ("Settings.cfg", "w") as dosya :
+            parser.write (dosya)
+
+    def speedfixed () :
+        global helpp
+        helpp = 1
+        
+        parser.set ("Settings", "helpp", "1")
+        with open ("Settings.cfg", "w") as dosya :
+            parser.write (dosya)
+
+    def speedup () :
+        global gamespeed
+        global helpp
+        helpp = 0 
+        gamespeed += 1
+        
+        parser.set ("Settings", "helpp", "0")
+        with open ("Settings.cfg", "w") as dosya :
+            parser.write (dosya)
+
+        return
     def close_window():
         menu.destroy ()
 
@@ -185,9 +203,10 @@ def Menu () :
 
     menu = tk.Tk()
     menu.title("Game Menu")
+    menu.resizable (width=False, height=False)
 
     window_width = 250
-    window_height = 250
+    window_height = 260
 
     center_window(menu, window_width, window_height)
 
@@ -204,9 +223,9 @@ def Menu () :
     difficulty_frame = tk.Frame(frame)
     difficulty_frame.pack()
 
-    button_easy = ttk.Button(difficulty_frame, text="Easy", command=Gamespeed_easy)
-    button_normal = ttk.Button(difficulty_frame, text="Normal", command=Gamespeed_normal)
-    button_hard = ttk.Button(difficulty_frame, text="Hard", command=Gamespeed_hard)
+    button_easy = ttk.Button(difficulty_frame, text="Easy", command=lambda: [Gamespeed_easy(), update_speed_info_label()])
+    button_normal = ttk.Button(difficulty_frame, text="Normal", command=lambda: [Gamespeed_normal(), update_speed_info_label()])
+    button_hard = ttk.Button(difficulty_frame, text="Hard", command=lambda: [Gamespeed_hard(), update_speed_info_label()])
 
     button_easy.pack(side="left")
     button_normal.pack(side="left")
@@ -221,8 +240,8 @@ def Menu () :
     play_frame = tk.Frame(frame) 
     play_frame.pack() 
 
-    button_yes = ttk.Button(play_frame, text="yes", command=speedfixed)
-    button_no = ttk.Button(play_frame, text="no", command=speedup)
+    button_yes = ttk.Button(play_frame, text="yes", command=lambda: [speedfixed(), update_sf_info_label()])
+    button_no = ttk.Button(play_frame, text="no", command=lambda: [speedup(), update_sf_info_label()])
 
     button_yes.pack(side="left")
     button_no.pack(side="left")
@@ -230,14 +249,34 @@ def Menu () :
     title = tk.Label(frame, text="------------------------", font='arial')
     title.pack()
 
-    window_frame = tk.Frame (frame)
+    window_frame = tk.Frame ()
     window_frame.pack ()
 
     close_button = ttk.Button(window_frame, text="Game Start", command=close_window)
     close_button.pack(side="left")
     quit_button = ttk.Button(window_frame, text="Quit Game", command=quit_window)
     quit_button.pack(side="right")
+
+    global speedinfo
+    global fixedinfo
     
+    if gamespeed == 3:
+        speedinfo = "easy"
+    elif gamespeed == 10:
+        speedinfo = "normal"
+    elif gamespeed == 20:
+        speedinfo = "hard"
+        
+    if helpp == 1 :
+        fixedinfo = "yes"
+    elif helpp == 0 :
+        fixedinfo = "no"
+
+    setting_info_s = tk.Label (menu, text = f"gamespeed = {speedinfo}")
+    setting_info_s.pack()
+    setting_info_sf = tk.Label (menu, text = f"speedfixed = {fixedinfo}")
+    setting_info_sf.pack()
+
     menu.mainloop()
 
 def Game():
