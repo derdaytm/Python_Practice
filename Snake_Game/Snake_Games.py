@@ -28,7 +28,7 @@ left = (-1, 0)
 stop = (0, 0)
 
 parser = configparser.ConfigParser ()
-parser.read ("Settings.cfg")
+parser.read ("Snake_Game/Settings.cfg")
 
 gamespeed = parser["Settings"].getint("gamespeed")
 helpp = parser["Settings"].getint("helpp")
